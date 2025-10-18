@@ -11,9 +11,10 @@
 7. [Endpoints disponibles](#endpoints-disponibles)
 8. [Cómo probar](#cómo-probar)
 9. [Pruebas de salud del servidor](#pruebas-de-salud-del-servidor)
-10. [Próximos pasos](#próximos-pasos-siguientes-fases-del-proyecto)
-11. [Notas finales](#notas-finales)
-12. [Contacto](#contacto)
+10. [Pruebas desde la Interfaz Web](#pruebas-desde-la-interfaz-web)
+11. [Próximos pasos](#próximos-pasos-siguientes-fases-del-proyecto)
+12. [Notas finales](#notas-finales)
+13. [Contacto](#contacto)
 
 El **Asistente San Joseito** es un proyecto académico desarrollado como parte del curso de *Sistemas Inteligentes*, cuyo objetivo final es implementar un **chatbot inteligente**, impulsado por **Gemini (Google AI)**, capaz de **crear, listar y gestionar eventos y notas personales** usando las APIs de **Google Calendar** y **Google Keep**.
 
@@ -52,6 +53,9 @@ sistemasInteligentes/
 ├── token.json              # Se genera automáticamente tras la autenticación
 └── src/
     ├── app.js              # Punto de entrada del servidor Express
+    ├── prompts             # Declaracion de los promts con los que se utilizaran los agentes de AI
+    ├── public/
+    │   └── index.html.     # Punto de entrada de la UI
     ├── routes/
     │   └── routes.js       # Definición de endpoints REST
     └── services/
@@ -246,6 +250,7 @@ All Ok!
 
 ### Pruebas desde la Interfaz Web
 
+
 Además de probar los endpoints desde **cURL** o **Postman**, este proyecto incluye una interfaz gráfica sencilla construida con **HTML + Bootstrap + JavaScript**, servida directamente por el backend Express.
 
 ####  Acceder a la interfaz
@@ -326,10 +331,13 @@ Verás la **interfaz principal** del Asistente San Joseito, que incluye:
 ---
 
 ##  Notas finales
----
+
+>  **Importante:** En esta primera versión (POC), solo se implementa la conexión y manejo de eventos de **Google Calendar**.  
+>  
+> El componente de interpretación de lenguaje natural mediante **Gemini** y la integración con **Google Keep** serán agregados en etapas posteriores.
 
 ## Contacto
-
+---
 Para dudas, sugerencias o colaboración puedes contactarme en:
 
 - **Correo:** rosopenaranda@gmail.com
