@@ -44,4 +44,7 @@ async function listEvents(tokens, range = "today", days = 3) {
   return res.data.items || [];
 }
 
-module.exports = { createEvent, listEvents };
+module.exports = { 
+  createEvent, 
+  listEvents 
+};

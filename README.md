@@ -64,7 +64,7 @@ sistemasInteligentes/
 
 ---
 
-## ⚙️ Instalación y configuración
+## Instalación y configuración
 ---
 ### 1. Clonar el repositorio
 
@@ -218,6 +218,7 @@ curl "http://localhost:3001/events?range=next_days&days=7"
 
 ## Cómo probar
 ---
+### Probar API
 1. Autentícate desde el navegador (`/auth/google`).
 2. Prueba los endpoints con:
    - **cURL**
@@ -227,7 +228,7 @@ curl "http://localhost:3001/events?range=next_days&days=7"
 
 ---
 
-##  Pruebas de salud del servidor
+###  Pruebas de salud del servidor
 ---
 **GET** `http://localhost:3001/server/`  
 Respuesta esperada:
@@ -243,6 +244,71 @@ All Ok!
 
 ---
 
+### Pruebas desde la Interfaz Web
+
+Además de probar los endpoints desde **cURL** o **Postman**, este proyecto incluye una interfaz gráfica sencilla construida con **HTML + Bootstrap + JavaScript**, servida directamente por el backend Express.
+
+####  Acceder a la interfaz
+
+1. Inicia el servidor:
+   ```bash
+   node src/app.js
+   ```
+2. Abre tu navegador y entra en:
+   ```
+   http://localhost:3001/
+   ```
+
+Verás la **interfaz principal** del Asistente San Joseito, que incluye:
+
+- **Autenticación con Google**  
+  - Un botón para iniciar sesión con tu cuenta de Google.  
+  - Si ya estás autenticado, el botón desaparecerá y se mostrará un mensaje:  
+    `Conectado con Google ✅`.
+
+-  **Formulario para crear eventos**  
+  - Permite ingresar título, fecha, hora de inicio y hora de fin.  
+  - Al presionar **“Crear evento”**, el evento se crea en tu **Google Calendar** y se muestra el resultado en pantalla.
+
+-  **Sección para listar eventos**  
+  - Puedes seleccionar un rango (`today`, `tomorrow`, `next_days`) y cantidad de días.  
+  - Los eventos se muestran en formato JSON, con solo los campos más importantes:
+    ```json
+    {
+      "creator": { "email": "tu@correo.com" },
+      "summary": "Reunión Demo",
+      "start": { "dateTime": "2025-10-18T15:00:00-05:00" },
+      "end": { "dateTime": "2025-10-18T16:00:00-05:00" },
+      "status": "confirmed",
+      "htmlLink": "https://www.google.com/calendar/event?eid=..."
+    }
+    ```
+
+####  Flujo recomendado de pruebas
+
+1.  **Autenticarse**  
+   - Haz clic en **“Iniciar sesión con Google”**.  
+   - Completa el flujo de OAuth.  
+   - Serás redirigido automáticamente de nuevo a `index.html` con la sesión activa.
+
+2. **Crear un evento**  
+   - Rellena el formulario.  
+   - Haz clic en **“Crear evento”**.  
+   - Deberías ver en pantalla la confirmación del evento y encontrarlo en tu Google Calendar.
+
+3. **Listar eventos**  
+   - Usa las opciones de rango y días.  
+   - Presiona **“Listar”**.  
+   - Observa los eventos resumidos directamente en la interfaz.
+
+4. **Cerrar sesión (opcional)**  
+   - Puedes eliminar el archivo `token.json` manualmente si deseas probar de nuevo el flujo de login:
+     ```bash
+     rm token.json
+     ```
+   - Luego recarga la página, y el botón de inicio de sesión volverá a aparecer.
+
+
 ##  Próximos pasos (siguientes fases del proyecto)
 ---
 1. **Integrar Gemini AI (Google Generative AI)**  
@@ -255,8 +321,7 @@ All Ok!
    - Integrar búsqueda de notas por contenido o título.
 
 3. **Interfaz de usuario (frontend)**  
-   - Chat interactivo que se comunique con el backend vía HTTP o WebSocket.  
-   - Autenticación persistente mediante OAuth.
+   - Mejorar la interfaz existente posiblemente usando un framework JS
 
 ---
 

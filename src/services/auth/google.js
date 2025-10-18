@@ -41,4 +41,21 @@ function getGoogleClients(tokens) {
   };
 }
 
-module.exports = { getAuthUrl, handleOAuthCallback, getGoogleClients };
+function hasTokens() {
+  try {
+    const TOKEN_PATH = path.resolve(process.cwd(), "token.json");
+    const raw = fs.readFileSync(TOKEN_PATH, "utf-8");
+    const t = JSON.parse(raw);
+    return !!(t && (t.access_token || t.refresh_token));
+  } catch {
+    return false;
+  }
+}
+
+module.exports = { 
+  getAuthUrl, 
+  handleOAuthCallback,
+  getGoogleClients, 
+  hasTokens 
+};
+

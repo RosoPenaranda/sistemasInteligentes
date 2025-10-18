@@ -1,6 +1,7 @@
 const express = require("express");
 var cors = require("cors");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 
 require("dotenv").config();
 const app = express();
@@ -20,7 +21,9 @@ app.use(express.json());
 app.use(cookieParser());
 
 // Routes
-
+// frontend
+app.use(express.static(path.join(__dirname, "public")));
+// api routes
 app.use(require("./routes/routes"));
 app.get("/checkHealth", function (req, res) {
   res.status(200).send("All Ok!");

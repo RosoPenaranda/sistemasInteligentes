@@ -5,7 +5,8 @@ const {
   getAuthUrl,
   handleOAuthCallback,
   createEvent,
-  listEvents
+  listEvents,
+  hasTokens
 } = require("../services/services");
 
 const router = express.Router();
@@ -20,11 +21,9 @@ function loadTokensFromFile() {
 }
 
 function getTokens(req) {
-  // 1) Preferimos token.json (funciona con plugins sin cookies)
   const fileTokens = loadTokensFromFile();
   if (fileTokens) return fileTokens;
 
-  // 2) Fallback: cookie (funciona si navegas desde el browser)
   try {
     if (req.cookies && req.cookies.gtokens) {
       return JSON.parse(req.cookies.gtokens);
@@ -42,7 +41,11 @@ router.get("/auth/google", (req, res) => res.redirect(getAuthUrl()));
 router.get("/oauth2callback", async (req, res) => {
   const { code } = req.query;
   await handleOAuthCallback(code); 
-  res.send("Auth OK. Puedes usar /events");
+  res.redirect("/?auth=ok");
+});
+
+router.get("/auth/status", (req, res) => {
+  res.json({ authenticated: hasTokens() });
 });
 
 router.post("/events", async (req, res) => {
