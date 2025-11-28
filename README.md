@@ -1,7 +1,6 @@
 # Asistente San Joseito – Chatbot con Integración Google Workspace
 
 ## Índice
-
 1. [Estado actual del proyecto (POC)](#estado-actual-del-proyecto-poc)
 2. [Tecnologías utilizadas](#tecnologías-utilizadas)
 3. [Estructura del proyecto](#estructura-del-proyecto)
@@ -9,12 +8,13 @@
 5. [Ejecución](#ejecución)
 6. [Autenticación con Google](#autenticación-con-google)
 7. [Endpoints disponibles](#endpoints-disponibles)
-8. [Cómo probar](#cómo-probar)
-9. [Pruebas de salud del servidor](#pruebas-de-salud-del-servidor)
-10. [Pruebas desde la Interfaz Web](#pruebas-desde-la-interfaz-web)
-11. [Próximos pasos](#próximos-pasos-siguientes-fases-del-proyecto)
-12. [Notas finales](#notas-finales)
-13. [Contacto](#contacto)
+8. [Chatbot Gemini y manejo de lenguaje natural](#chatbot-gemini-y-manejo-de-lenguaje-natural)
+9. [Cómo probar](#cómo-probar)
+10. [Pruebas de salud del servidor](#pruebas-de-salud-del-servidor)
+11. [Pruebas desde la Interfaz Web](#pruebas-desde-la-interfaz-web)
+12. [Próximos pasos](#próximos-pasos-siguientes-fases-del-proyecto)
+13. [Notas finales](#notas-finales)
+14. [Contacto](#contacto)
 
 El **Asistente San Joseito** es un proyecto académico desarrollado como parte del curso de *Sistemas Inteligentes*, cuyo objetivo final es implementar un **chatbot inteligente**, impulsado por **Gemini (Google AI)**, capaz de **crear, listar y gestionar eventos y notas personales** usando las APIs de **Google Calendar** y **Google Keep**.
 
@@ -37,6 +37,7 @@ El chatbot interpretará las intenciones del usuario y ejecutará las acciones c
 | **Node.js** (20.15)| Entorno de ejecución del servidor |
 | **Express** | Framework backend para gestionar rutas y middlewares |
 | **Google APIs (googleapis)** | Cliente oficial para consumir Google Calendar y autenticación OAuth |
+| **Google AI Studio | Api oficial para el uso de los modelos de gemini | 
 | **dotenv** | Manejo de variables de entorno |
 | **cors** | Habilitación de CORS para pruebas locales |
 | **cookie-parser** | (Opcional) Manejo de cookies en el flujo OAuth |
@@ -53,17 +54,21 @@ sistemasInteligentes/
 ├── token.json              # Se genera automáticamente tras la autenticación
 └── src/
     ├── app.js              # Punto de entrada del servidor Express
-    ├── prompts             # Declaracion de los promts con los que se utilizaran los agentes de AI
+    ├── prompts/            # Declaracion de los promts con los que se utilizaran los agentes de AI
     ├── public/
-    │   └── index.html.     # Punto de entrada de la UI
+    │   └── index.html      # Punto de entrada de la UI
     ├── routes/
     │   └── routes.js       # Definición de endpoints REST
     └── services/
         ├── services.js
         ├── actions/
         │   └── calendar.js # Funciones para crear y listar eventos
+        ├── ai/
+        │   ├── gemini.js.  # Funciones para comunicarse con Gemini
+        │   └── chat.js     # Funciones que manejan el chat
         └── auth/
-            └── google.js   # Configuración OAuth y autenticación Google
+            └── google.js.  # Configuración OAuth y autenticación Google
+
 ```
 
 ---
@@ -92,6 +97,7 @@ GOOGLE_CLIENT_ID=tu_client_id_aqui
 GOOGLE_CLIENT_SECRET=tu_client_secret_aqui
 GOOGLE_REDIRECT_URI=http://localhost:3001/oauth2callback
 PORT=3001
+GEMINI_API_KEY=tu_GEMINI_API_KEY
 ```
 
 ### 4. Crear credenciales OAuth en Google Cloud Console
@@ -220,6 +226,55 @@ curl "http://localhost:3001/events?range=next_days&days=7"
 
 ---
 
+### 3. Chatbot Gemini
+
+**POST** `http://localhost:3001/chat`
+
+Envía un mensaje en lenguaje natural para crear o listar eventos:
+
+```json
+{ "message": "crea una reunión mañana a las 3pm por 15 minutos" }
+```
+
+El chatbot interpreta la intención, extrae parámetros y ejecuta la acción correspondiente.
+
+Ejemplo de respuesta:
+```json
+{
+  "ok": true,
+  "message": "Tu petición ha sido procesada: evento creado con éxito.",
+  "intent": "create_event",
+  "result": { ... }
+}
+```
+
+## Chatbot Gemini y manejo de lenguaje natural
+---
+El chatbot Gemini permite interactuar usando lenguaje natural para crear y listar eventos. Interpreta frases como:
+
+**Crear eventos:**
+```
+crea un evento mañana a las 3 llamado prueba
+agenda reunión hoy a las 5pm por 1 hora
+programa demo POC el 18 de octubre a las 3pm por 45 minutos
+```
+
+**Listar eventos:**
+```
+qué tengo hoy
+muéstrame mis eventos de mañana
+qué hay en los próximos 5 días
+```
+
+El backend convierte fechas relativas como “mañana” en fechas reales (`YYYY-MM-DD`).
+
+Ejemplo:
+```
+crea un evento mañana a las 3pm por 20 minutos
+```
+El servidor generará la fecha correspondiente a mañana.
+
+---
 ## Cómo probar
 ---
 ### Probar API
@@ -317,9 +372,9 @@ Verás la **interfaz principal** del Asistente San Joseito, que incluye:
 ##  Próximos pasos (siguientes fases del proyecto)
 ---
 1. **Integrar Gemini AI (Google Generative AI)**  
-   - El backend recibirá mensajes en lenguaje natural.  
-   - Gemini clasificará la intención (crear evento, listar eventos, crear nota, buscar nota, etc.).  
-   - El servidor ejecutará las acciones correspondientes usando las APIs de Google.
+   - El backend recibirá mensajes en lenguaje natural.  (Hecho)
+   - Gemini clasificará la intención (crear evento, listar eventos, crear nota, buscar nota, etc.).  (Hecho parcialmente solo para el calendar)
+   - El servidor ejecutará las acciones correspondientes usando las APIs de Google. (Hecho parcialmente solo para el calendar)
 
 2. **Agregar Google Keep API**  
    - Crear y listar notas desde el chatbot.  
@@ -334,7 +389,7 @@ Verás la **interfaz principal** del Asistente San Joseito, que incluye:
 
 >  **Importante:** En esta primera versión (POC), solo se implementa la conexión y manejo de eventos de **Google Calendar**.  
 >  
-> El componente de interpretación de lenguaje natural mediante **Gemini** y la integración con **Google Keep** serán agregados en etapas posteriores.
+>  La integración con **Google Keep** serán agregados en etapas posteriores.
 
 ## Contacto
 ---
@@ -345,5 +400,3 @@ Para dudas, sugerencias o colaboración puedes contactarme en:
 >  **Importante:** En esta primera versión (POC), solo se implementa la conexión y manejo de eventos de **Google Calendar**.  
 >  
 > El componente de interpretación de lenguaje natural mediante **Gemini** y la integración con **Google Keep** serán agregados en etapas posteriores.
-
----

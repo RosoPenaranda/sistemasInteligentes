@@ -6,6 +6,7 @@ const {
   handleOAuthCallback,
   createEvent,
   listEvents,
+  handleChatMessage,
   hasTokens
 } = require("../services/services");
 
@@ -75,6 +76,24 @@ router.get("/events", async (req, res) => {
   } catch (err) {
     console.error("GET /events error:", err);
     res.status(500).json({ error: err.message });
+  }
+});
+
+router.post("/chat", async (req, res) => {
+  try {
+    const tokens = loadTokensFromFile();
+    if (!tokens) return res.status(401).json({ ok: false, message: "Falta autenticación (visita /auth/google)" });
+
+    const { message } = req.body || {};
+    if (!message || typeof message !== "string") {
+      return res.status(400).json({ ok: false, message: "Falta 'message' (string) en el body" });
+    }
+
+    const response = await handleChatMessage(tokens, message);
+    return res.json(response);
+  } catch (err) {
+    console.error("POST /chat error:", err);
+    res.status(500).json({ ok: false, message: err.message });
   }
 });
 

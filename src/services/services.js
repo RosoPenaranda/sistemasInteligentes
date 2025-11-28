@@ -6,6 +6,8 @@ const {
   getAuthUrl, handleOAuthCallback, getGoogleClients, hasTokens
 } = require("./auth/google");
 
+const { handleChatMessage } = require("./ai/chat");
+
 function allOk () {
   return "Services All Ok!";
 };
@@ -20,5 +22,6 @@ module.exports = {
   listEvents,
   getAuthUrl,
   handleOAuthCallback,
-  getGoogleClients
+  getGoogleClients,
+  handleChatMessage
 };  
