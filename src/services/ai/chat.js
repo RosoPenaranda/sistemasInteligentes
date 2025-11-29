@@ -1,4 +1,3 @@
-// src/services/ai/chat.js
 const { classifyIntent } = require("./gemini");
 const { createEvent, listEvents } = require("../actions/calendar");
 
