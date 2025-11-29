@@ -26,7 +26,7 @@ El chatbot interpretará las intenciones del usuario y ejecutará las acciones c
 ---
 >  **Esta primera versión (POC)** implementa únicamente la conexión con **Google Calendar**, permitiendo **crear y listar eventos**.  
 >  
-> La integración con **Gemini AI** y con **Google Keep** se añadirá en fases posteriores.
+> La integración con **Google Keep** se añadirá en fases posteriores.
 
 ---
 
@@ -324,7 +324,7 @@ Verás la **interfaz principal** del Asistente San Joseito, que incluye:
 - **Autenticación con Google**  
   - Un botón para iniciar sesión con tu cuenta de Google.  
   - Si ya estás autenticado, el botón desaparecerá y se mostrará un mensaje:  
-    `Conectado con Google `.
+    `Conectado con Google git sta`.
 
 -  **Formulario para crear eventos**  
   - Permite ingresar título, fecha, hora de inicio y hora de fin.  
