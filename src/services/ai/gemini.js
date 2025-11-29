@@ -1,4 +1,3 @@
-// src/services/ai/gemini.js
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const { Intention } = require("../../prompts");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -10,7 +9,7 @@ const model = () => genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 const REQUIRED_CREATE_FIELDS = ["title", "date", "startTime", "endTime"];
 
 function resolveRelativeDate(params) {
-  const now = new Date(); // aquí está tu "hoy" real
+  const now = new Date(); 
   let target = null;
 
   if (params.relativeDay === "today") {
@@ -62,7 +61,6 @@ async function classifyIntent(userText) {
     parsed.params = resolveRelativeDate(parsed.params);
   }
 
-  // sanea defaults para listar
   if (parsed.intent === "list_events") {
     if (!parsed.params.range) parsed.params.range = "today";
     if (parsed.params.range === "next_days" && !parsed.params.days) parsed.params.days = 3;
